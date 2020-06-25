@@ -28,27 +28,25 @@ namespace API.Controllers
                 var checkApiSignatureExist = request.Headers.TryGetValues("X-Signature", out rq.signature);
 
 
-             
-          
+                    if (checkApiKeyExist & checkApiRoutExist & checkApiSignatureExist)
+                    {
+                        if (authenticated(request.Method.ToString(), rq.rout.First().ToString()))
+                         {
 
-                if (checkApiKeyExist & checkApiRoutExist & checkApiSignatureExist)
-                {
-                    string apiKeyClient = checkApiKeyExist.ToString();
-                    string apiRoutClient = checkApiRoutExist.ToString();
-
-
-          
-
-                   
-                    //return request.CreateResponse(HttpStatusCode.OK, "key :" + rq.key.First() + " rout:" + rq.rout.First()+" signature:"+rq.signature.First()+"hs:"+GetHash(rq.key.First(), rq.rout.First()));
+                        validacionKEY = true;
+                      
+                        var response = await base.SendAsync(request, Token);
+                        return response;
+                         }
 
 
-                    validacionKEY = true;
+                        if(unauthenticated(request.Method.ToString(), rq.rout.First().ToString()))
+                         {
+                        var response = await base.SendAsync(request, Token);
+                        return response;
+                         }
 
-                    var response = await base.SendAsync(request, Token);
-                    return response;
                 }
-
                 return request.CreateResponse(HttpStatusCode.NotFound, "NotFound:(");
             }
             catch
@@ -61,23 +59,34 @@ namespace API.Controllers
          
         }
 
-        private static String GetHash(String text, String key)
+        private bool authenticated(string verbo, string metodo)
         {
-            // change according to your needs, an UTF8Encoding
-            // could be more suitable in certain situations
-            ASCIIEncoding encoding = new ASCIIEncoding();
+            if (verbo == "POST" && metodo =="message")
+            {
+                return true;
 
-            Byte[] textBytes = encoding.GetBytes(text);
-            Byte[] keyBytes = encoding.GetBytes(key);
-
-            Byte[] hashBytes;
-
-            using (HMACSHA256 hash = new HMACSHA256(keyBytes))
-                hashBytes = hash.ComputeHash(textBytes);
-
-            return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+            }
+            else if (verbo == "GET" && metodo == "message")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
-      
+
+        private bool unauthenticated(string verbo, string metodo)
+        {
+            if (verbo == "PUT" && metodo == "credential")
+            {
+                return true;
+
+            }else
+            {
+                return false;
+            }
+        }
 
     }
 }
