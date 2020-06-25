@@ -30,12 +30,12 @@ namespace API.Controllers
         }
 
 
-        public HttpResponseMessage Put([FromBody] Models.Persona persona)
+        public HttpResponseMessage Put([FromBody] Models.Auth aut)
         {
             try
             {
                 //Se valida que el no exista la llave
-                string valKey = Conexion.ConsultaID("select * from tbl_persona where key_ = '" + persona.key + "'");
+                string valKey = Conexion.ConsultaID("select * from tbl_persona where key_ = '" + aut.key + "'");
                 if (valKey != null)
                 {
                     //si la llave existe en la BD se responde con el codigo 403
@@ -44,7 +44,7 @@ namespace API.Controllers
                 else {
                     //si la llave no existe se crea un registro y se responde con el codigo 204
                     string sql = "insert into tbl_persona (id,key_,shared_secret) values ('" +
-                        persona.key + persona.shared_secret + "', '" + persona.key + "', '" + persona.shared_secret + "' )";
+                        aut.key + aut.shared_secret + "', '" + aut.key + "', '" + aut.shared_secret + "' )";
                     
                     Conexion.Insertar(sql);
 

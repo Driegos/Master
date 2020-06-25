@@ -1,0 +1,23 @@
+﻿<div class="jumbotron text-center">
+    <h1>Metodo GET</h1>
+    <p>Ingresar el id</p>
+</div>
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+{
+    <div class="container">
+        <div class="form-group">
+            <label for="usr">ID:</label>
+            <input type="text" class="form-control" name="Id">
+        </div>
+        <button type="button" class="btn btn-success">Buscar</button>
+    </div>
+
+}
+
+@if (ViewBag.id != null)
+{
+    <div class="jumbotron">
+          <p>El key es el siguiente: @ViewBag.id</p>
+    </div>
+}
+

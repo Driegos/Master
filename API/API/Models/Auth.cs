@@ -5,7 +5,7 @@ using System.Web;
 
 namespace API.Models
 {
-    public class Persona
+    public class Auth
     {
         public string key { get; set; }
         public string shared_secret { get; set; }

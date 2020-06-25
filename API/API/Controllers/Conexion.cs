@@ -42,9 +42,9 @@ namespace API.Controllers
 
         }
 
-        public static IEnumerable<Persona> Consulta(string cadena)
+        public static IEnumerable<Auth> Consulta(string cadena)
         {
-            List<Persona> lstResult = new List<Persona>();
+            List<Auth> lstResult = new List<Auth>();
 
             string connetionString = "Data Source=DESKTOP-UNVUFTH\\SA;Initial Catalog=MasterDevel;User ID=servicios; Password=123";
 
@@ -56,7 +56,7 @@ namespace API.Controllers
                 SqlDataReader reader = sentencia.ExecuteReader();
                 while (reader.Read())
                 {
-                    lstResult.Add(new Persona { key = reader.GetString(0), shared_secret = reader.GetString(1) });
+                    lstResult.Add(new Auth { key = reader.GetString(0), shared_secret = reader.GetString(1) });
             
                 }
                 reader.Close();
